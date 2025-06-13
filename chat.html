@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOSEM Chat</title>
+    <link rel="stylesheet" href="style.css"> 
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
+    <script>
+        // إعدادات Firebase المدمجة مباشرة
+        const firebaseConfig = {
+          apiKey: "AIzaSyBhbTM1II234gTTz_s4mgYBoytnfqjcRaI",
+          authDomain: "gosem-chat-app.firebaseapp.com",
+          databaseURL: "https://gosem-chat-app-default-rtdb.firebaseio.com",
+          projectId: "gosem-chat-app",
+          storageBucket: "gosem-chat-app.firebasestorage.app",
+          messagingSenderId: "1006726365584",
+          appId: "1:1006726365584:web:a98028879226d794fa3315",
+          measurementId: "G-FXVYVREN5R"
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1 id="app-title">GOSEM Chat</h1>
+            <div class="room-selector">
+                <select id="roomSelect">
+                    <option value="general">العامة</option>
+                    <option value="tech">تقنية</option>
+                    <option value="entertainment">ترفيه</option>
+                    <option value="news">أخبار</option>
+                </select>
+            </div>
+        </div>
+        <div class="header-right">
+            <button id="settingsBtn" class="btn-icon" title="الإعدادات">
+                <span>⚙️</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="chat-container">
+            <div id="chatMessages" class="chat-messages"></div>
+
+            <div class="message-input">
+                <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا...">
+                <button id="sendBtn" class="btn-primary">إرسال</button>
+            </div>
+        </div>
+
+        <div id="adminPanel" class="admin-panel hidden">
+            <h2>لوحة تحكم المشرف</h2>
+            <div class="admin-messages" id="adminMessages"></div>
+        </div>
+    </main>
+
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>الإعدادات</h2>
+            </div>
+    </div>
+
+    <audio id="messageSound" src="message-sent.mp3" preload="auto"></audio> 
+    <audio id="notificationSound" src="notification.mp3" preload="auto"></audio> <script src="firebase-config.js"></script> 
+    <script src="chat.js"></script> 
+</body>
+</html>
