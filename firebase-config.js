@@ -1,22 +1,20 @@
-// firebase-config.js
-// تهيئة Firebase باستخدام firebaseConfig المعرف عالمياً
-// (تم تعريفه الآن مباشرة في ملفات HTML: index.html و chat.html)
-if (typeof firebaseConfig !== 'undefined' && firebase.apps.length === 0) {
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBuu8nb0NVeR95WQ1En-gs_pH8kJpwQrm4",
+    authDomain: "myappchat-b7894.firebaseapp.com",
+    databaseURL: "https://myappchat-b7894-default-rtdb.firebaseio.com",
+    projectId: "myappchat-b7894",
+    storageBucket: "myappchat-b7894.firebasestorage.app",
+    messagingSenderId: "751116646298",
+    appId: "1:751116646298:web:d998d5e6a14fe4901b6c23",
+    measurementId: "G-SYC0179PD8"
+};
+
+// Initialize Firebase
+if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
-    console.log('Firebase initialized successfully from inline config.');
-} else if (firebase.apps.length > 0) {
-    console.log('Firebase already initialized.');
-} else {
-    // هذه الحالة لا يجب أن تحدث إذا تم تعريف firebaseConfig بشكل صحيح في HTML
-    console.error('firebaseConfig غير معرف أو Firebase لم يتم تهيئتها. يرجى التحقق من ملفات HTML.');
-    alert('خطأ في إعدادات Firebase. يرجى التأكد من تعريفها في HTML.');
+    console.log("Firebase initialized with new config");
 }
 
-// الحصول على مرجع لقاعدة البيانات
+// Get database reference
 const database = firebase.database();
-
-// دالة مساعدة لتنسيق الوقت
-function formatTime(timestamp) {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
