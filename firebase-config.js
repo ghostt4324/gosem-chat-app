@@ -10,11 +10,7 @@ const firebaseConfig = {
     measurementId: "G-SYC0179PD8"
 };
 
-// Initialize Firebase
-if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-    console.log("Firebase initialized with new config");
+// Export for use in other files
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = firebaseConfig;
 }
-
-// Get database reference
-const database = firebase.database();

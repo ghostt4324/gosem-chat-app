@@ -3,169 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#4361ee">
-    <title>GOSEM Chat - تجربة دردشة متطورة</title>
+    <title>GOSEM Chat - الدردشة</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-    
     <script src="firebase-config.js"></script>
     <script src="chat.js" defer></script>
 </head>
 <body>
-    <!-- شريط التحميل الأولي -->
-    <div class="app-loader">
-        <div class="loader-spinner"></div>
-        <p>جاري تهيئة التطبيق...</p>
-    </div>
-
-    <!-- واجهة التطبيق الرئيسية -->
-    <div class="app-container hidden">
-        <!-- شريط العنوان المطور -->
-        <header class="app-header">
-            <div class="header-left">
-                <div class="app-logo">
-                    <i class="fas fa-comments"></i>
-                    <h1 id="app-title">GOSEM Chat</h1>
-                </div>
-                
-                <div class="room-selector">
-                    <div class="selector-icon">
-                        <i class="fas fa-hashtag"></i>
-                    </div>
-                    <select id="roomSelect">
-                        <option value="general">العامة</option>
-                        <option value="tech">تقنية</option>
-                        <option value="entertainment">ترفيه</option>
-                        <option value="news">أخبار</option>
-                        <option value="support">الدعم الفني</option>
-                    </select>
-                </div>
+    <header class="app-header">
+        <div class="header-left">
+            <div class="app-logo">
+                <i class="fas fa-comments"></i>
+                <h1 id="app-title">GOSEM Chat</h1>
             </div>
             
-            <div class="header-right">
-                <div class="user-avatar">
-                    <i class="fas fa-user-circle"></i>
+            <div class="room-selector">
+                <div class="selector-icon">
+                    <i class="fas fa-hashtag"></i>
                 </div>
-                
-                <div class="header-buttons">
-                    <button id="notificationsBtn" class="btn-icon" title="الإشعارات">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </button>
-                    
-                    <button id="searchBtn" class="btn-icon" title="بحث">
-                        <i class="fas fa-search"></i>
-                    </button>
-                    
-                    <button id="settingsBtn" class="btn-icon" title="الإعدادات">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                </div>
+                <select id="roomSelect">
+                    <option value="general">العامة</option>
+                    <option value="tech">تقنية</option>
+                    <option value="entertainment">ترفيه</option>
+                    <option value="news">أخبار</option>
+                </select>
             </div>
-        </header>
-
-        <!-- المحتوى الرئيسي -->
-        <main class="app-main">
-            <!-- شريط معلومات الغرفة -->
-            <div class="room-info-bar">
-                <div class="room-meta">
-                    <h2 id="currentRoomTitle">الغرفة العامة</h2>
-                    <div class="room-stats">
-                        <span><i class="fas fa-users"></i> <span id="onlineCount">24</span> متواجدون</span>
-                        <span><i class="fas fa-comment"></i> <span id="messageCount">128</span> رسالة</span>
-                    </div>
-                </div>
-                
-                <div class="room-actions">
-                    <button class="btn-action" id="roomInviteBtn">
-                        <i class="fas fa-user-plus"></i> دعوة
-                    </button>
-                    <button class="btn-action" id="roomFavoriteBtn">
-                        <i class="far fa-star"></i> مفضلة
-                    </button>
-                </div>
-            </div>
-            
-            <!-- منطقة المحادثة -->
-            <div class="chat-container">
-                <!-- شريط التمرير السريع -->
-                <div class="scroll-indicator hidden">
-                    <span>رسائل جديدة</span>
-                    <button id="scrollToBottomBtn">
-                        <i class="fas fa-arrow-down"></i>
-                    </button>
-                </div>
-                
-                <div id="chatMessages" class="chat-messages">
-                    <!-- الرسائل ستحمل هنا -->
-                </div>
-
-                <!-- شريط إدخال الرسائل المتطور -->
-                <div class="message-input-container">
-                    <div class="input-actions">
-                        <button class="btn-input-action" title="إضافة مرفق">
-                            <i class="fas fa-paperclip"></i>
-                        </button>
-                        <button class="btn-input-action" title="إرسال صورة">
-                            <i class="fas fa-image"></i>
-                        </button>
-                        <button class="btn-input-action" id="emojiBtn" title="إضافة إيموجي">
-                            <i class="far fa-smile"></i>
-                        </button>
-                    </div>
-                    
-                    <div class="message-input">
-                        <div id="messageInput" contenteditable="true" placeholder="اكتب رسالتك هنا..."></div>
-                    </div>
-                    
-                    <div class="send-actions">
-                        <button class="btn-input-action" id="voiceInputBtn" title="إدخال صوتي">
-                            <i class="fas fa-microphone"></i>
-                        </button>
-                        <button id="sendBtn" class="btn-primary">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <!-- لوحة المشرفين المطورة -->
-        <div id="adminPanel" class="admin-panel">
-            <div class="admin-panel-header">
-                <h2><i class="fas fa-shield-alt"></i> لوحة تحكم المشرف</h2>
-                <div class="admin-tools">
-                    <button class="btn-admin-tool" id="exportAllBtn">
-                        <i class="fas fa-file-export"></i> تصدير الكل
-                    </button>
-                    <button class="btn-admin-tool" id="clearAllBtn">
-                        <i class="fas fa-trash-alt"></i> مسح الكل
-                    </button>
-                </div>
-            </div>
-            
-            <div class="admin-messages" id="adminMessages"></div>
         </div>
-    </div>
+        
+        <div class="header-right">
+            <div class="user-info">
+                <span id="userName"></span>
+                <button id="logoutBtn" class="btn-icon" title="تسجيل الخروج">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+            </div>
+            
+            <div class="header-buttons">
+                <button id="notificationsBtn" class="btn-icon" title="الإشعارات">
+                    <i class="fas fa-bell"></i>
+                </button>
+                
+                <button id="settingsBtn" class="btn-icon" title="الإعدادات">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <!-- نافذة الإعدادات المتطورة -->
+    <main class="app-main">
+        <div class="room-info-bar">
+            <div class="room-meta">
+                <h2 id="currentRoomTitle">الغرفة العامة</h2>
+                <div class="room-stats">
+                    <span><i class="fas fa-users"></i> <span id="onlineCount">0</span> متواجدون</span>
+                    <span><i class="fas fa-comment"></i> <span id="messageCount">0</span> رسالة</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-container">
+            <div id="chatMessages" class="chat-messages"></div>
+
+            <div class="message-input-container">
+                <div class="input-actions">
+                    <button class="btn-input-action" title="إضافة إيموجي">
+                        <i class="far fa-smile"></i>
+                    </button>
+                </div>
+                
+                <div class="message-input">
+                    <input type="text" id="messageInput" placeholder="اكتب رسالتك هنا...">
+                </div>
+                
+                <div class="send-actions">
+                    <button id="sendBtn" class="btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <div id="settingsModal" class="modal">
         <div class="modal-overlay"></div>
         <div class="modal-container">
             <div class="modal-header">
-                <h2><i class="fas fa-cog"></i> إعدادات متقدمة</h2>
+                <h2><i class="fas fa-cog"></i> الإعدادات</h2>
                 <button class="modal-close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             
             <div class="modal-body">
-                <!-- محتوى الإعدادات سيتم حقنه هنا -->
+                <div class="setting-section">
+                    <h3><i class="fas fa-user"></i> حساب المستخدم</h3>
+                    <div class="form-group">
+                        <label>اسم المستخدم</label>
+                        <input type="text" id="usernameInput" class="input-field">
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h3><i class="fas fa-palette"></i> المظهر</h3>
+                    <div class="form-group">
+                        <label>السمة</label>
+                        <select id="themeSelect" class="input-field">
+                            <option value="default">افتراضي</option>
+                            <option value="dark">داكن</option>
+                            <option value="blue">أزرق</option>
+                            <option value="green">أخضر</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-section">
+                    <h3><i class="fas fa-volume-up"></i> الأصوات</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="soundEnabled" checked>
+                            تفعيل أصوات الإشعارات
+                        </label>
+                    </div>
+                </div>
             </div>
             
             <div class="modal-footer">
@@ -175,8 +137,6 @@
         </div>
     </div>
 
-    <!-- المكونات الصوتية -->
-    <audio id="messageSound" src="https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3" preload="auto"></audio> 
-    <audio id="notificationSound" src="https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3" preload="auto"></audio> 
+    <audio id="messageSound" src="notification.mp3" preload="auto"></audio>
 </body>
 </html>

@@ -3,124 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GOSEM Chat - Loading</title>
+    <title>GOSEM Chat - تسجيل الدخول</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="firebase-config.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --light: #f8f9fa;
+            --dark: #212529;
         }
         
-        body {
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+        .auth-container {
             display: flex;
-            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
+        .auth-left {
+            flex: 1;
+            display: flex;
             align-items: center;
-            height: 100vh;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            justify-content: center;
+            padding: 2rem;
             color: white;
             text-align: center;
         }
         
-        .splash-container {
-            max-width: 600px;
+        .auth-right {
+            flex: 1;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 2rem;
         }
         
-        .logo-animation {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 2rem;
-        }
-        
-        .logo-circle {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: white;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-        
-        .logo-circle:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .logo-circle:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            font-weight: 700;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        
-        p {
-            font-size: 1.1rem;
-            margin-bottom: 2rem;
-            opacity: 0.9;
-        }
-        
-        .progress-container {
+        .auth-card {
             width: 100%;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
             overflow: hidden;
         }
         
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: white;
-            border-radius: 10px;
-            animation: loadProgress 1.5s forwards;
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid #eee;
         }
         
-        @keyframes loadProgress {
-            to { width: 100%; }
+        .auth-tab {
+            flex: 1;
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .auth-form {
+            padding: 2rem;
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .app-logo {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .auth-container {
+                flex-direction: column;
+            }
+            
+            .auth-left {
+                padding: 4rem 2rem;
+            }
         }
     </style>
-    <script>
-        // توجيه إلى صفحة الدردشة مع تأثير متحرك
-        window.addEventListener('load', function() {
-            const progress = document.querySelector('.progress-bar');
-            let width = 0;
-            
-            const interval = setInterval(() => {
-                if (width >= 100) {
-                    clearInterval(interval);
-                    document.body.style.opacity = 0;
-                    setTimeout(() => {
-                        window.location.href = 'chat.html';
-                    }, 500);
-                } else {
-                    width++;
-                    progress.style.width = width + '%';
-                }
-            }, 15);
-        });
-    </script>
 </head>
-<body>
-    <div class="splash-container">
-        <div class="logo-animation">
-            <div class="logo-circle"></div>
-            <div class="logo-circle"></div>
-            <div class="logo-circle"></div>
-        </div>
-        <h1>GOSEM Chat</h1>
-        <p>جاري تحميل تجربة الدردشة المتطورة...</p>
-        <div class="progress-container">
-            <div class="progress-bar"></div>
+<body class="auth-container">
+    <div class="auth-left">
+        <div>
+            <div class="app-logo">
+                <i class="fas fa-comments"></i>
+            </div>
+            <h1>GOSEM Chat</h1>
+            <p>منصة الدردشة الأكثر تطوراً وأماناً</p>
+            <div class="features">
+                <p><i class="fas fa-shield-alt"></i> تشفير متقدم</p>
+                <p><i class="fas fa-bolt"></i> سرعة فائقة</p>
+                <p><i class="fas fa-palette"></i> تخصيص كامل</p>
+            </div>
         </div>
     </div>
+    
+    <div class="auth-right">
+        <div class="auth-card">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-form="login">تسجيل الدخول</div>
+                <div class="auth-tab" data-form="register">إنشاء حساب</div>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="loginEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" id="loginPassword" placeholder="أدخل كلمة المرور" required>
+                </div>
+                
+                <div class="form-options">
+                    <label class="remember">
+                        <input type="checkbox"> تذكرني
+                    </label>
+                    <a href="#" id="forgotPassword">نسيت كلمة المرور؟</a>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> دخول
+                </button>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName"><i class="fas fa-user"></i> الاسم الكامل</label>
+                    <input type="text" id="registerName" placeholder="أدخل اسمك الكامل" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerEmail"><i class="fas fa-envelope"></i> البريد الإلكتروني</label>
+                    <input type="email" id="registerEmail" placeholder="أدخل بريدك الإلكتروني" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerPassword"><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" id="registerPassword" placeholder="أنشئ كلمة مرور قوية" required>
+                    <small>8 أحرف على الأقل، تحتوي على أرقام وحروف</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="registerConfirm"><i class="fas fa-lock"></i> تأكيد كلمة المرور</label>
+                    <input type="password" id="registerConfirm" placeholder="أعد إدخال كلمة المرور" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" required>
+                        أوافق على <a href="#">شروط الخدمة</a> و <a href="#">سياسة الخصوصية</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-user-plus"></i> إنشاء حساب
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // تهيئة Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // عناصر واجهة المستخدم
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const forgotPassword = document.getElementById('forgotPassword');
+        
+        // تبديل بين علامات التبويب
+        authTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // إزالة النشاط من جميع الألسنة
+                authTabs.forEach(t => t.classList.remove('active'));
+                
+                // إضافة النشاط للسان المحدد
+                tab.classList.add('active');
+                
+                // إظهار النموذج المحدد
+                const formId = tab.dataset.form;
+                document.querySelectorAll('.auth-form').forEach(form => {
+                    form.classList.remove('active');
+                });
+                document.getElementById(`${formId}Form`).classList.add('active');
+            });
+        });
+        
+        // تسجيل الدخول
+        loginForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // تسجيل الدخول الناجح
+                    const user = userCredential.user;
+                    localStorage.setItem('userData', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName || user.email.split('@')[0]
+                    }));
+                    window.location.href = 'chat.html';
+                })
+                .catch(error => {
+                    // معالجة الأخطاء
+                    let errorMessage = 'حدث خطأ في تسجيل الدخول';
+                    
+                    switch(error.code) {
+                        case 'auth/user-not-found':
+                            errorMessage = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني';
+                            break;
+                        case 'auth/wrong-password':
+                            errorMessage = 'كلمة المرور غير صحيحة';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'بريد إلكتروني غير صالح';
+                            break;
+                    }
+                    
+                    alert(errorMessage);
+                });
+        });
+        
+        // إنشاء حساب جديد
+        registerForm.addEventListener('submit', e => {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirm').value;
+            
+            // التحقق من تطابق كلمات المرور
+            if (password !== confirmPassword) {
+                alert('كلمات المرور غير متطابقة!');
+                return;
+            }
+            
+            // التحقق من قوة كلمة المرور
+            if (password.length < 8) {
+                alert('كلمة المرور يجب أن تكون 8 أحرف على الأقل');
+                return;
+            }
+            
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // تحديث ملف تعريف المستخدم
+                    return userCredential.user.updateProfile({
+                        displayName: name
+                    });
+                })
+                .then(() => {
+                    // الحصول على بيانات المستخدم المحدثة
+                    const user = firebase.auth().currentUser;
+                    
+                    // حفظ بيانات المستخدم في localStorage
+                    localStorage.setItem('userData', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName
+                    }));
+                    
+                    // إعادة توجيه إلى صفحة الدردشة
+                    window.location.href = 'chat.html';
+                })
+                .catch(error => {
+                    // معالجة أخطاء التسجيل
+                    let errorMessage = 'حدث خطأ في إنشاء الحساب';
+                    
+                    switch(error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage = 'البريد الإلكتروني مستخدم بالفعل';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage = 'بريد إلكتروني غير صالح';
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage = 'كلمة المرور ضعيفة، يجب أن تكون 6 أحرف على الأقل';
+                            break;
+                    }
+                    
+                    alert(errorMessage);
+                });
+        });
+        
+        // إعادة تعيين كلمة المرور
+        forgotPassword.addEventListener('click', e => {
+            e.preventDefault();
+            const email = prompt('الرجاء إدخال بريدك الإلكتروني لإعادة تعيين كلمة المرور:');
+            
+            if (email) {
+                firebase.auth().sendPasswordResetEmail(email)
+                    .then(() => {
+                        alert('تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني');
+                    })
+                    .catch(error => {
+                        alert(`خطأ: ${error.message}`);
+                    });
+            }
+        });
+    </script>
 </body>
 </html>
